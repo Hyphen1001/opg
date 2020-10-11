@@ -91,7 +91,7 @@ int main(int argc,char *argv[]){
                     ii++;
                 }
                 string ttmp=tmp.substr(0,ii);
-                while(ttmp[0]=='0'){ttmp.erase(0,1);}
+                while(ttmp[0]=='0'&&ttmp.length()>=2){ttmp.erase(0,1);}
                 cout<<"Int("<<ttmp<<")"<<endl;
                 if(ii!=tmp.length()){
                     cout<<"Ident("<<tmp.substr(ii)<<")"<<endl;
