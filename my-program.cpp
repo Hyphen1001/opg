@@ -9,7 +9,7 @@
 using namespace std;
 
 int main(int argc,char *argv[]){
-   fstream fs(agrv[1]);
+   fstream fs(argv[1]);
    stringstream ss;
    ss<<fs.rdbuf();
    string str=ss.str();
