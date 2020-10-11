@@ -94,10 +94,10 @@ int main(int argc,char *argv[]){
                 while(ttmp[0]=='0'){ttmp.erase(0,1);}
                 cout<<"Int("<<ttmp<<")"<<endl;
                 if(ii!=tmp.length()){
-                    cout<<"Iden("<<tmp.substr(ii)<<")"<<endl;
+                    cout<<"Ident("<<tmp.substr(ii)<<")"<<endl;
                 }
             }else{
-                cout<<"Iden("<<tmp<<")"<<endl;
+                cout<<"Ident("<<tmp<<")"<<endl;
             }
            i+=j;
        }else{
