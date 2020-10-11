@@ -8,8 +8,8 @@
 
 using namespace std;
 
-int main(){
-   fstream fs("input.txt");
+int main(int argc,char *argv[]){
+   fstream fs(agrv[1]);
    stringstream ss;
    ss<<fs.rdbuf();
    string str=ss.str();
