@@ -1,5 +1,5 @@
 FROM gcc:10
 WORKDIR /app/
 COPY ./* ./
-RUN gcc my-program.c -o program
+RUN gcc problem1.c -o program1
 RUN chmod +x program
