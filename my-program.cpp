@@ -22,7 +22,7 @@ int cmp_matrix[6][6] = {
 
 int to_index(char a)
 {
-    int ret=-1;
+    int ret = -1;
     switch (a)
     {
     case '+':
@@ -66,6 +66,10 @@ int reduce(int top)
             top -= 2;
             ret = top;
         }
+        else if (stack[top - 1] == '(')
+        {
+            ret = -2;
+        }
     }
     else if (stack[top] == 'i')
     {
@@ -81,6 +85,10 @@ int reduce(int top)
             ret = top;
         }
     }
+    else
+    {
+        ret = -2;
+    }
 
     return ret;
 }
@@ -91,7 +99,7 @@ int main(int argc, char *argv[])
     ss << fs.rdbuf();
     str = ss.str();
     int len = str.length();
-    str[len - 2] = '#';
+    str[len - 1] = '#';
     int i = 0, top = 0;
     stack[top] = '#';
     while (1)
@@ -136,12 +144,16 @@ int main(int argc, char *argv[])
                 printf("RE\n");
                 break;
             }
+            else if (top == -2)
+            {
+                printf("E\n");
+                break;
+            }
             else
             {
                 printf("R\n");
             }
         }
     }
-    printf("%s\n",str.c_str());
     return 0;
 }
