@@ -90,7 +90,8 @@ int main(int argc, char *argv[])
     fstream fs(argv[1]);
     ss << fs.rdbuf();
     str = ss.str();
-    int len = str.length();
+    printf("%s",str);
+    /*int len = str.length();
     str[len - 2] = '#';
     int i = 0, top = 0;
     stack[top] = '#';
@@ -141,6 +142,6 @@ int main(int argc, char *argv[])
                 printf("R\n");
             }
         }
-    }
+    }*/
     return 0;
 }
