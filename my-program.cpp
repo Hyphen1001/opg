@@ -142,6 +142,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-    
+    printf("%s\n",str.c_str());
     return 0;
 }
