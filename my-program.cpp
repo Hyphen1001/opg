@@ -8,105 +8,139 @@
 
 using namespace std;
 
-int main(int argc,char *argv[]){
-   fstream fs(argv[1]);
-   stringstream ss;
-   ss<<fs.rdbuf();
-   string str=ss.str();
-   for(int i=0;i<str.length();){
-       if(str[i]==' '||str[i]=='\n'){i++;}
-       else if (str[i]==':')
-       {    
-           if(str[i+1]!='='){
-                cout<<"Colon"<<endl;
-                i++;
-           }else
-           {
-               cout<<"Assign"<<endl;
-               i+=2;
-           }
-           
-       }else if (str[i]=='+')
-       {
-           cout<<"Plus"<<endl;
-           i++;
-       }else if (str[i]=='*')
-       {
-           cout<<"Star"<<endl;
-           i++;
-       }else if (str[i]==',')
-       {
-           cout<<"Comma"<<endl;
-           i++;
-       }else if (str[i]=='(')
-       {
-           cout<<"LParenthesis"<<endl;
-           i++;
-       }else if (str[i]==')')
-       {
-           cout<<"RParenthesis"<<endl;
-           i++;
-       }else if(str[i]=='B'){
-           if(str.substr(i,5)=="BEGIN"){
-               cout<<"Begin"<<endl;
-               i+=5;
-           }
-       }else if (str[i]=='E')
-       {
-           if(str.substr(i,3)=="END"){
-               cout<<"End"<<endl;
-               i+=3;
-           }else if(str.substr(i,4)=="ELSE"){
-               cout<<"Else"<<endl;
-               i+=4;
-           }
-       }else if (str[i]=='F')
-       {
-           if(str.substr(i,3)=="FOR"){
-               cout<<"For"<<endl;
-               i+=3;
-           }
-       }else if (str[i]=='I')
-       {
-           if(str.substr(i,2)=="IF"){
-               cout<<"If"<<endl;
-               i+=2;
-           }
-       }else if (str[i]=='T')
-       {
-           if(str.substr(i,4)=="THEN"){
-               cout<<"Then"<<endl;
-               i+=4;
-           }
-       }else if(isdigit(str[i])||isalpha(str[i])){
-           string tmp=str.substr(i,1);
-           int j=1;
-           while(isdigit(str[i+j])||isalpha(str[i+j])){
-               tmp+=str[i+j];
-               j++;
-            }
-            if(isdigit(tmp[0])){
-                int ii=1;
-                while (isdigit(tmp[ii])){
-                    ii++;
-                }
-                string ttmp=tmp.substr(0,ii);
-                while(ttmp[0]=='0'&&ttmp.length()>=2){ttmp.erase(0,1);}
-                cout<<"Int("<<ttmp<<")"<<endl;
-                if(ii!=tmp.length()){
-                    cout<<"Ident("<<tmp.substr(ii)<<")"<<endl;
-                }
-            }else{
-                cout<<"Ident("<<tmp<<")"<<endl;
-            }
-           i+=j;
-       }else{
-           cout<<"Unknown"<<endl;
-           break;
-       }
- 
-   }
-   system("pause");
-   return 0;
+char stack[5];
+stringstream ss;
+string str;
+//优先算符矩阵
+int cmp_matrix[6][6] = {
+    1, -1, -1, -1, 1, 1,
+    1, 1, -1, -1, 1, 1,
+    1, 1, 2, 2, 1, 1,
+    -1, -1, -1, -1, 0, 1,
+    1, 1, 2, 2, 1, 1,
+    -1, -1, -1, -1, -1, 0};
 
+int to_index(char a)
+{
+    int ret=-1;
+    switch (a)
+    {
+    case '+':
+        ret = 0;
+        break;
+    case '*':
+        ret = 1;
+        break;
+    case 'i':
+        ret = 2;
+        break;
+    case '(':
+        ret = 3;
+        break;
+    case ')':
+        ret = 4;
+        break;
+    case '#':
+        ret = 5;
+        break;
+    }
+    return ret;
+}
+//-1小于，0等于，1大于，2非法
+int cmp(char a, char b)
+{
+    return cmp_matrix[to_index(a)][to_index(b)];
+}
+int reduce(int top)
+{
+    int ret = -1;
+    if (stack[top] == 'N')
+    {
+        if (stack[top - 1] == '+' && stack[top - 2] == 'N')
+        {
+            top -= 2;
+            ret = top;
+        }
+        else if (stack[top - 1] == '*' && stack[top - 2] == 'N')
+        {
+            top -= 2;
+            ret = top;
+        }
+    }
+    else if (stack[top] == 'i')
+    {
+        stack[top] = 'N';
+        ret = top;
+    }
+    else if (stack[top] == ')')
+    {
+        if (stack[top - 1] == 'N' && stack[top - 2] == '(')
+        {
+            stack[top - 2] = 'N';
+            top -= 2;
+            ret = top;
+        }
+    }
+
+    return ret;
+}
+
+int main(int argc, char *argv[])
+{
+    fstream fs(argv[1]);
+    ss << fs.rdbuf();
+    str = ss.str();
+    int len = str.length();
+    str[len - 2] = '#';
+    int i = 0, top = 0;
+    stack[top] = '#';
+    while (1)
+    {
+        char top_tmp = stack[top];
+        if (stack[top] == 'N')
+        {
+            top_tmp = stack[top - 1];
+        }
+        int cmp_ans = cmp(top_tmp, str[i]);
+        if (cmp_ans == 2)
+        {
+            printf("E\n");
+            break;
+        }
+        else if (cmp_ans == -1)
+        {
+            printf("I%c\n", str[i]);
+            top++;
+            stack[top] = str[i];
+            i++;
+        }
+        else if (cmp_ans == 0)
+        {
+            if (str[i] == '#')
+            {
+                break;
+            }
+            else
+            {
+                printf("I%c\n", str[i]);
+                top++;
+                stack[top] = str[i];
+                i++;
+            }
+        }
+        else if (cmp_ans == 1)
+        {
+            top = reduce(top);
+            if (top == -1)
+            {
+                printf("RE\n");
+                break;
+            }
+            else
+            {
+                printf("R\n");
+            }
+        }
+    }
+    return 0;
 }
