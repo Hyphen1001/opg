@@ -8,7 +8,7 @@
 
 using namespace std;
 
-char stack[5];
+char stack[5000];
 stringstream ss;
 string str;
 //优先算符矩阵
@@ -90,8 +90,7 @@ int main(int argc, char *argv[])
     fstream fs(argv[1]);
     ss << fs.rdbuf();
     str = ss.str();
-    printf("%s",str);
-    /*int len = str.length();
+    int len = str.length();
     str[len - 2] = '#';
     int i = 0, top = 0;
     stack[top] = '#';
@@ -142,6 +141,6 @@ int main(int argc, char *argv[])
                 printf("R\n");
             }
         }
-    }*/
+    }
     return 0;
 }
