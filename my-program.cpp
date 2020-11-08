@@ -91,7 +91,6 @@ int main(int argc, char *argv[])
     ss << fs.rdbuf();
     str = ss.str();
     int len = str.length();
-    for(int i=0;i<len-2;i++){printf("%c\n",str[i]);
     str[len - 2] = '#';
     int i = 0, top = 0;
     stack[top] = '#';
@@ -143,6 +142,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-    //printf("%s\n",&str.c_str);
+    
     return 0;
 }
