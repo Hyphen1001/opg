@@ -43,13 +43,23 @@ int to_index(char a)
     case '#':
         ret = 5;
         break;
+    default:
+        ret = -1;
+        break;
     }
     return ret;
 }
-//-1小于，0等于，1大于，2非法
+//-1小于，0等于，1大于，2无法比较,-2非法
 int cmp(char a, char b)
 {
-    return cmp_matrix[to_index(a)][to_index(b)];
+    if (to_index(a) >= 0 && to_index(b) >= 0)
+    {
+        return cmp_matrix[to_index(a)][to_index(b)];
+    }
+    else
+    {
+        return -2;
+    }
 }
 int reduce(int top)
 {
@@ -85,11 +95,6 @@ int reduce(int top)
             ret = top;
         }
     }
-    else
-    {
-        ret = -2;
-    }
-
     return ret;
 }
 
@@ -110,7 +115,11 @@ int main(int argc, char *argv[])
             top_tmp = stack[top - 1];
         }
         int cmp_ans = cmp(top_tmp, str[i]);
-        if (cmp_ans == 2)
+        if(cmp_ans==-2){
+            printf("E\n");
+            break;
+        }
+        else if (cmp_ans == 2)
         {
             printf("E\n");
             break;
