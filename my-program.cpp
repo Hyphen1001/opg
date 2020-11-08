@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     ss << fs.rdbuf();
     str = ss.str();
     int len = str.length();
-    str[len - 1] = '#';
+    str[len - 2] = '#';
     int i = 0, top = 0;
     stack[top] = '#';
     while (1)
